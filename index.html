@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Certificate</title>
+    <style>
+	/*LICENSED UNDER:  GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007, https://www.gnu.org/licenses/gpl-3.0.en.html#license-text, https://github.com/silvmer/TEST-CERTIFICATE-V.2.2.2/blob/main/LICENSE, */
+        html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+        :root { --border: #000; --accent: #3498db; }
+        body { font-family: Arial, sans-serif !important; background: #f0f2f5; padding: 10px; font-size: 11px !important; }
+        .no-print { max-width: 1150px; margin: 0 auto 10px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .form-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .form-group { display: flex; flex-direction: column; }
+        .span-2 { grid-column: span 2; }
+        .span-4 { grid-column: span 4; }
+        label { font-weight: bold; font-size: 10px; color: #555; margin-bottom: 2px; text-transform: uppercase; }
+        textarea#desc { resize: none; overflow: hidden; min-height: 40px; }
+        input, select, textarea { padding: 5px; border: 1px solid #ccc; border-radius: 4px; margin-top: 2px; font-size: 11px !important; }
+        .config-section { grid-column: span 4; background: #f8f9fa; border: 1px solid #ddd; padding: 10px; border-radius: 4px; margin-top: 5px; display: none; }
+        .config-title { font-size: 11px; color: #004a99; border-bottom: 1px solid #004a99; margin-bottom: 8px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+        .others-input { margin-top: 4px; border-color: var(--accent); background: #fdfdfd; }
+        .hidden { display: none; }
+        .btn-group { margin-top: 15px; display: flex; gap: 10px; }
+        button { padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-blue { background: #004a99; color: white; }
+        .btn-green { background: #28a745; color: white; margin: 0 5px; } 
+        .btn-red { background: #dc3545; color: white; }
+        .btn-gray { background: #444; color: white; }
+
+        @page { size: A4 portrait; margin: 40mm 15mm 15mm 15mm; }
+        #certificate { width: 180mm; margin: 0 auto; background: white; display: none; color: #000; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; margin-bottom: -1px; }
+        td { border: 1px solid var(--border); padding: 4px 10px; vertical-align: top; word-wrap: break-word; font-size: 11px !important; }
+        .title-cell { text-align: center; font-size: 15px !important; font-weight: bold; height: 35px; border-bottom: 1px solid #000; padding: 0 !important; }
+        .title-cell u { text-decoration: underline; }
+        .no-right-border { border-right: none !important; }
+        .no-left-border { border-left: none !important; }
+        .text-right { text-align: right; }
+        .centered-header { text-align: center; font-weight: bold; font-size: 12px !important; padding: 6px 0; border: 1px solid #000; border-bottom: none; }
+        .spec-table td { padding: 6px 10px; line-height: 1.3; }
+        .label-cell { font-weight: bold; width: 180px; text-align: left; }
+        .spec-val { text-align: center; } 
+        .sn-cell { text-align: center; font-weight: bold; }
+        .val-cell { text-align: center; height: 22px; }
+        .legal-box { border: 1px solid #000; padding: 12px; text-align: justify; line-height: 1.3; font-size: 10.5px !important; border-top: none; }
+        .caution-box { border: 1px solid #000; padding: 10px; font-size: 10px !important; border-top: none; text-align: center; }
+        .caution-label { font-weight: bold; display: block; margin-bottom: 2px; }
+        .caution-text { font-style: italic; }
+        .footer-table td { text-align: center; padding: 0 !important; border: 1px solid #000; border-top: none; height: 65px; vertical-align: bottom; }
+        .footer-label { font-weight: bold; }
+        .footer-spacer-row td { border: none; height: 10px; border-left: 1px solid #000; border-right: 1px solid #000; padding: 0 !important; }
+        .form-ref { font-size: 8px !important; margin-top: 15px; text-align: right; }
+        @media print { .no-print { display: none !important; } body { background: white; padding: 0; display: flex; justify-content: center; align-items: flex-start; } #certificate { display: block !important; border: none; } }
+    </style>
+</head>
+<body>
+
+<div class="no-print">
+    <h2 style="margin-top:0; font-size: 18px;">Test Certificate Generator V.2.2.2</h2>
+    <div style="background: #e9ecef; padding: 10px; border-radius: 4px; margin-bottom: 15px; display: flex; gap: 10px; align-items: center;">
+        <label style="color: #000;">Input Part No:</label>
+        <input list="partOptions" id="partLookup" placeholder="Search or Type Part No..." oninput="lookupData()" style="width: 200px;">
+        <datalist id="partOptions"></datalist>
+    </div>
+
+    <div class="form-grid" id="mainForm">
+        <div class="form-group span-2">
+            <label>Test Category</label>
+            <select id="testType">
+                <option value="HYDRO">HYDROTEST CERTIFICATE</option>
+                <option value="HYDRO_SS">HYDROTEST CERTIFICATE (SS HOSE)</option>
+                <option value="HYDRO_COMP">HYDROTEST CERTIFICATE (COMPOSITE HOSE)</option>
+                <option value="NITROGEN">NITROGEN TEST CERTIFICATE</option>
+                <option value="AIR">AIR BREATHING TEST CERTIFICATE</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Certificate sequence</label>
+            <input type="text" id="tcSeq" placeholder="e.g., 001">
+        </div>
+        <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="certDate">
+        </div>
+        <div class="form-group">
+            <label>Sales Order No.</label>
+            <input type="text" id="idSO" placeholder="1234">
+        </div>
+        <div class="form-group">
+            <label>Sales Order Date</label>
+            <input type="date" id="soDate">
+        </div>
+        <div class="form-group">
+            <label>SL No 1</label>
+            <input type="text" id="idSL1" placeholder="05">
+        </div>
+        <div class="form-group">
+            <label>SL No 2</label>
+            <input type="text" id="idSL2" placeholder="optional">
+        </div>
+        <div class="form-group">
+            <label>Tech Code</label>
+            <input type="text" id="idTech" placeholder="AB">
+        </div>
+        <div class="form-group">
+            <label>Show ID Number?</label>
+            <div style="display:flex; align-items:center; height:100%;">
+                <input type="checkbox" id="toggleIdNo" checked style="width:20px; height:20px; margin:0;">
+                <span style="font-size:10px; margin-left:5px;">YES</span>
+            </div>
+        </div>
+        <div class="form-group span-2">
+            <label>Customer Name</label>
+            <input type="text" id="custName">
+        </div>
+        <div class="form-group">
+            <label>LPO No.</label>
+            <input type="text" id="lpoNo">
+        </div>
+        <div class="form-group">
+            <label>LPO Date</label>
+            <input type="date" id="lpoDate">
+        </div>
+        <div class="form-group span-4">
+            <label>Description</label>
+            <textarea id="desc" rows="1" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px'"></textarea>
+        </div>
+
+        <div class="form-group span-2">
+            <label>End 1 Detail (Manual Override)</label>
+            <input type="text" id="end1" placeholder="Manual entry overrides config">
+        </div>
+        <div class="form-group span-2">
+            <label>Use End 1 Config?</label>
+            <input type="checkbox" id="showE1" onchange="document.getElementById('end1Section').style.display = this.checked ? 'block' : 'none'">
+        </div>
+        <div class="config-section" id="end1Section">
+            <div class="config-title">END 1 CONFIGURATION</div>
+            <div id="end1Container"></div>
+        </div>
+
+        <div class="form-group span-2">
+            <label>End 2 Detail (Manual Override)</label>
+            <input type="text" id="end2" placeholder="Manual entry overrides config">
+        </div>
+        <div class="form-group span-2">
+            <label>Use End 2 Config?</label>
+            <input type="checkbox" id="showE2" onchange="document.getElementById('end2Section').style.display = this.checked ? 'block' : 'none'">
+        </div>
+        <div class="config-section" id="end2Section">
+            <div class="config-title">
+                END 2 CONFIGURATION 
+                <button type="button" class="btn-gray" style="padding:2px 8px; font-size:9px;" onclick="copyEnd1ToEnd2()">SYNC FROM END 1</button>
+            </div>
+            <div id="end2Container"></div>
+        </div>
+
+        <div class="form-group">
+            <label>S/N</label>
+            <input type="text" id="sn">
+        </div>
+        <div class="form-group">
+            <label>Length</label>
+            <input type="text" id="length">
+        </div>
+        <div class="form-group">
+            <label>QTY</label>
+            <input type="text" id="qty">
+        </div>
+        <div class="form-group">
+            <label>Unit</label>
+            <select id="unitSelect" onchange="calculateTP()">
+                <option value="BAR">BAR</option>
+                <option value="PSI">PSI</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Working Pressure</label>
+            <input type="text" id="workPressure" oninput="calculateTP()">
+        </div>
+        <div class="form-group">
+            <label>TP Multiplier</label>
+            <select id="tpMultiplier" onchange="calculateTP()">
+                <option value="1">1X</option>
+                <option value="1.5">1.5X</option>
+                <option value="2" selected>2X</option>
+            </select>
+        </div>
+        <div class="form-group span-2">
+            <label>Test Pressure (Auto)</label>
+            <input type="text" id="testPressure">
+        </div>
+        <div class="form-group span-2">
+            <label>Connection Method</label>
+            <select id="connType" onchange="toggleOtherConn()">
+                <option value="Crimped with:">Crimped with:</option>
+                <option value="Swaged with:">Swaged with:</option>
+                <option value="Welded with:">Welded with:</option>
+                <option value="Clamped with:">Clamped with:</option>
+                <option value="OTHER">Other:</option>
+            </select>
+            <input type="text" id="connTypeOther" placeholder="Specify method..." style="display:none; margin-top:5px;">
+        </div>
+        <div class="form-group">
+            <label>Hose I.D</label>
+            <input type="text" id="hoseID">
+        </div>
+        <div class="form-group">
+            <label>Temp Range</label>
+            <input type="text" id="tempRange">
+        </div>
+        <div class="form-group span-2">
+            <label>Reinforcement</label>
+            <input type="text" id="reinforcement">
+        </div>
+        <div class="form-group span-4">
+            <label>Observation</label>
+            <input type="text" id="obs" value="No Leak and Hose found Normal">
+        </div>
+    </div>
+    <div class="btn-group">
+        <button class="btn-blue" onclick="generate()">Generate & Preview</button>
+        <button class="btn-green" onclick="saveFilledHTML()">Save</button>
+        <button class="btn-red" onclick="clearAll()">Clear All</button>
+        <button class="btn-gray" onclick="window.print()">Print</button>
+    </div>
+</div>
+
+<div id="certificate">
+    <table>
+        <tr><td colspan="2" class="title-cell"><u id="outTitle"></u></td></tr>
+        <tr>
+            <td class="no-right-border"><b>Test certificate No:</b> <span id="outTc"></span></td>
+            <td class="text-right no-left-border"><b>DATE:</b> <span id="outDate"></span></td>
+        </tr>
+        <tr><td colspan="2"><b>Customer Name:</b> <span id="outCust"></span></td></tr>
+        <tr>
+            <td class="no-right-border"><b>Customer LPO No:</b> <span id="outLpo"></span></td>
+            <td class="text-right no-left-border"><b>DATE:</b> <span id="outLpoDate"></span></td>
+        </tr>
+        <tr><td colspan="2"><b>Description:</b> <span id="outDesc"></span></td></tr>
+    </table>
+    <table>
+        <tr>
+            <td class="sn-cell">S/N:</td>
+            <td class="sn-cell">Length:</td>
+            <td class="sn-cell">QTY:</td>
+        </tr>
+        <tr>
+            <td class="val-cell" id="outSn"></td>
+            <td class="val-cell" id="outLen"></td>
+            <td class="val-cell" id="outQty"></td>
+        </tr>
+    </table>
+    <div class="centered-header">PRODUCT SPECIFICATION</div>
+    <table class="spec-table">
+        <tr><td class="label-cell">Hose I.D</td><td class="spec-val" id="outId"></td></tr>
+        <tr><td class="label-cell">Hose Connection</td><td class="spec-val"><b id="outConnType"></b><br>End 1: <span id="outEnd1"></span><br>End 2: <span id="outEnd2"></span></td></tr>
+        <tr><td class="label-cell">Temperature Range</td><td class="spec-val" id="outTemp"></td></tr>
+        <tr><td class="label-cell">Working Pressure</td><td class="spec-val" id="outWp"></td></tr>
+        <tr><td class="label-cell">Testing Pressure</td><td class="spec-val" id="outTp"></td></tr>
+        <tr id="rowIdNo"><td class="label-cell">Identification Number</td><td class="spec-val" id="outIdNo"></td></tr>
+        <tr><td class="label-cell">Reinforcement</td><td class="spec-val" id="outRein"></td></tr>
+        <tr><td class="label-cell">Observation</td><td class="spec-val" id="outObs"></td></tr>
+    </table>
+    <div class="legal-box" id="outLegal"></div>
+    <div class="caution-box">
+        <span class="caution-label" id="outCautionLabel">CAUTION:</span>
+        <span class="caution-text" id="outCaution"></span>
+    </div>
+    <table class="footer-table">
+        <tr class="footer-spacer-row"><td></td><td></td><td></td></tr>
+        <tr>
+            <td><span class="footer-label">DATE: </span><span id="outFooterDate"></span></td>
+            <td><span class="footer-label">VERIFIED BY: </span></td>
+            <td><span class="footer-label">QC SIGNATURE: </span></td>
+        </tr>
+    </table>
+    <div class="form-ref">F/QA/18 REV00 DATED 15.05.17</div>
+</div>
+
+<script src="database.js"></script>
+<script>
+    const buildEndHTML = (prefix) => `
+        <div class="form-grid" style="grid-template-columns: repeat(6, 1fr); background: white; padding: 5px; border-radius: 4px; gap:5px;">
+            <div class="form-group"><label>Size</label><input type="text" id="${prefix}s"></div>
+            <div class="form-group"><label>Material</label>
+                <select id="${prefix}m"><option value="CS" selected>CS</option><option value="SS">SS</option><option value="GI">GI</option><option value="ALUMINIUM">ALUMINIUM</option><option value="BRASS">BRASS</option><option value="PTFE">PTFE</option><option value="OTHERS">OTHERS</option><option value="BLANK">BLANK</option></select>
+                <input type="text" id="${prefix}mo" class="others-input hidden" placeholder="Specify Material">
+            </div>
+            <div class="form-group"><label>Thread</label>
+                <select id="${prefix}t"><option value="NPT" selected>NPT</option><option value="BSP">BSP</option><option value="JIC">JIC</option><option value="9/16&quot; UNF RH &amp; LH">9/16" UNF RH & LH</option><option value="METRIC">METRIC</option><option value="ORFS">ORFS</option><option value="SAE CODE 61">SAE CODE 61</option><option value="SAE CODE 62">SAE CODE 62</option><option value="FLANGE">FLANGE</option><option value="OTHERS">OTHERS</option><option value="BLANK">BLANK</option></select>
+                <input type="text" id="${prefix}to" class="others-input hidden" placeholder="Specify Thread">
+            </div>
+            <div class="form-group"><label>Gender/Rating</label>
+                <select id="${prefix}g"><option value="MALE" selected>MALE</option><option value="FEMALE">FEMALE</option><option value="CL150">CL150</option><option value="CL300">CL300</option><option value="PN6">PN6</option><option value="PN10">PN10</option><option value="PN16">PN16</option><option value="PN25">PN25</option><option value="JIS5K">JIS5K</option><option value="JIS10K">JIS10K</option><option value="JIS16K">JIS16K</option><option value="JIS20K">JIS20K</option><option value="OTHERS">OTHERS</option><option value="BLANK">BLANK</option></select>
+                <input type="text" id="${prefix}go" class="others-input hidden" placeholder="Specify Rating">
+            </div>
+            <div class="form-group"><label>Fixity</label>
+                <select id="${prefix}f"><option value="BLANK" selected>BLANK</option><option value="FIXED">FIXED</option><option value="SWIVEL">SWIVEL</option><option value="OTHERS">OTHERS</option></select>
+                <input type="text" id="${prefix}fo" class="others-input hidden" placeholder="Specify Fixity">
+            </div>
+            <div class="form-group"><label>Shape</label>
+                <select id="${prefix}sh"><option value="BLANK" selected>BLANK</option><option value="STRAIGHT">STRAIGHT</option><option value="90 DEG">90 DEG</option><option value="45 DEG">45 DEG</option><option value="OTHERS">OTHERS</option></select>
+                <input type="text" id="${prefix}sho" class="others-input hidden" placeholder="Specify Shape">
+            </div>
+        </div>
+        <div class="form-grid" style="grid-template-columns: repeat(7, 1fr); margin-top:5px; border-top:1px dashed #ccc; padding-top:5px;">
+            <div class="form-group"><label>Attach Method</label>
+                <select id="${prefix}am" onchange="toggleAttachmentFields('${prefix}')">
+                    <option value="BLANK">BLANK</option>
+                    <option value="N/A" selected>N/A</option>
+                    <option value="SCREWED WITH">SCREWED WITH</option>
+                    <option value="CLAMPED WITH">CLAMPED WITH</option>
+                    <option value="OTHERS">OTHERS</option>
+                </select>
+                <input type="text" id="${prefix}amo" class="others-input hidden" placeholder="Specify Method">
+            </div>
+            <div id="${prefix}details" class="form-grid hidden" style="grid-column: span 6; display: grid; grid-template-columns: repeat(6, 1fr); gap: 5px;">
+                <div class="form-group"><label>Att. Size</label><input type="text" id="${prefix}as"></div>
+                <div class="form-group"><label>Att. Mat</label>
+                    <select id="${prefix}am_mat"><option value="BLANK" selected>BLANK</option><option value="CS">CS</option><option value="SS">SS</option><option value="GI">GI</option><option value="ALUMINIUM">ALUMINIUM</option><option value="BRASS">BRASS</option><option value="PTFE">PTFE</option><option value="OTHERS">OTHERS</option></select>
+                    <input type="text" id="${prefix}am_mato" class="others-input hidden" placeholder="Specify Material">
+                </div>
+                <div class="form-group"><label>Type</label>
+                    <select id="${prefix}at"><option value="BLANK" selected>BLANK</option><option value="HAMMER UNION">HAMMER UNION</option><option value="CAMLOCK">CAMLOCK</option><option value="CHICAGO/CROWFOOT">CHICAGO/CROWFOOT</option><option value="QUICK RELEASE COUPLING (QRC)">QRC</option><option value="OTHERS">OTHERS</option></select>
+                    <input type="text" id="${prefix}ato" class="others-input hidden" placeholder="Specify Type">
+                </div>
+                <div class="form-group"><label>Model</label>
+                    <select id="${prefix}al"><option value="BLANK" selected>BLANK</option><option value="COUPLING">COUPLING</option><option value="FIG100">FIG100</option><option value="FIG200">FIG200</option><option value="FIG206">FIG206</option><option value="FIG602">FIG602</option><option value="FIG1502">FIG1502</option><option value="TYPE A">TYPE A</option><option value="TYPE B">TYPE B</option><option value="TYPE C">TYPE C</option><option value="TYPE D">TYPE D</option><option value="TYPE E">TYPE E</option><option value="TYPE F">TYPE F</option><option value="ISO 7241- A SERIES">ISO 7241- A</option><option value="ISO 7241- B SERIES">ISO 7241- B</option><option value="ISO 14540 - 10K PSI">ISO 14540</option><option value="ISO 16028- FLAT FACED SERIES">ISO 16028</option><option value="AIR BREATHING">AIR BREATHING</option><option value="WATER BLAST - 15K PSI">WATER BLAST</option><option value="TRUCK COUPLING THREAD TYPE HYDRAULIC QUICK COUPLING ( STEEL)">TRUCK HYD (STEEL)</option><option value="THREAD TYPE HYDRAULIC QUICK COUPLING ( BRASS)">TRUCK HYD (BRASS)</option><option value="PNUEMATIC">PNUEMATIC</option><option value="OTHERS">OTHERS</option></select>
+                    <input type="text" id="${prefix}alo" class="others-input hidden" placeholder="Specify Model">
+                </div>
+                <div class="form-group"><label>Gender</label>
+                    <select id="${prefix}ag"><option value="BLANK" selected>BLANK</option><option value="MALE">MALE</option><option value="FEMALE">FEMALE</option><option value="OTHERS">OTHERS</option></select>
+                    <input type="text" id="${prefix}ago" class="others-input hidden" placeholder="Specify Gender">
+                </div>
+                <div class="form-group"><label>Accessory</label>
+                    <select id="${prefix}ac"><option value="BLANK" selected>BLANK</option><option value="WITH DUST CAP">WITH DUST CAP</option><option value="WITH DUST PLUG">WITH DUST PLUG</option><option value="OTHERS">OTHERS</option></select>
+                    <input type="text" id="${prefix}aco" class="others-input hidden" placeholder="Specify Accessory">
+                </div>
+            </div>
+        </div>`;
+
+    window.onload = () => {
+        const today = new Date().toISOString().split('T')[0];
+        if(!document.getElementById('certDate').value) document.getElementById('certDate').value = today;
+        if(!document.getElementById('soDate').value) document.getElementById('soDate').value = today;
+        if(!document.getElementById('lpoDate').value) document.getElementById('lpoDate').value = today;
+
+        document.getElementById('end1Container').innerHTML = buildEndHTML('e1');
+        document.getElementById('end2Container').innerHTML = buildEndHTML('e2');
+        const dataList = document.getElementById('partOptions');
+        if (typeof hoseDatabase !== 'undefined') {
+            Object.keys(hoseDatabase).sort().forEach(part => {
+                const opt = document.createElement('option');
+                opt.value = part;
+                dataList.appendChild(opt);
+            });
+        }
+        document.body.addEventListener('change', (e) => {
+            if (e.target.tagName === 'SELECT') {
+                const oInput = document.getElementById(e.target.id + 'o') || document.getElementById(e.target.id + 'Other');
+                if (oInput) oInput.classList.toggle('hidden', e.target.value !== 'OTHERS' && e.target.value !== 'OTHER');
+            }
+        });
+    };
+
+    function toggleAttachmentFields(prefix) {
+        const attachMethod = document.getElementById(prefix + 'am').value;
+        const detailsContainer = document.getElementById(prefix + 'details');
+        detailsContainer.classList.toggle('hidden', attachMethod === "N/A" || attachMethod === "BLANK");
+    }
+
+    function copyEnd1ToEnd2() {
+        const keys = ['s', 'm', 'mo', 't', 'to', 'g', 'go', 'f', 'fo', 'sh', 'sho', 'am', 'amo', 'as', 'am_mat', 'am_mato', 'at', 'ato', 'al', 'alo', 'ag', 'ago', 'ac', 'aco'];
+        keys.forEach(k => {
+            const e1 = document.getElementById('e1' + k), e2 = document.getElementById('e2' + k);
+            if (e1 && e2) {
+                e2.value = e1.value;
+                e2.classList.toggle('hidden', e1.classList.contains('hidden'));
+            }
+        });
+        toggleAttachmentFields('e2');
+    }
+
+    function resolveVal(sId, oId) {
+        const s = document.getElementById(sId), o = document.getElementById(oId);
+        if (!s || s.value === 'BLANK' || s.value === 'N/A' || s.value === 'STRAIGHT') return "";
+        return (s.value === 'OTHERS' || s.value === 'OTHER') ? (o ? o.value : "") : s.value;
+    }
+
+    function buildEndStr(prefix) {
+        if (document.getElementById(prefix === 'e1' ? 'end1' : 'end2').value) return document.getElementById(prefix === 'e1' ? 'end1' : 'end2').value;
+        let base = [document.getElementById(prefix + 's').value, resolveVal(prefix + 'm', prefix + 'mo'), resolveVal(prefix + 't', prefix + 'to'), resolveVal(prefix + 'g', prefix + 'go'), resolveVal(prefix + 'f', prefix + 'fo'), resolveVal(prefix + 'sh', prefix + 'sho')].filter(v => v !== "").join(" ");
+        const amSelect = document.getElementById(prefix + 'am'), amVal = resolveVal(prefix + 'am', prefix + 'amo');
+        if (amSelect.value === "N/A") return base || "N/A";
+        if (amVal || amSelect.value === "BLANK") {
+            let att = [amVal, document.getElementById(prefix + 'as').value, resolveVal(prefix + 'am_mat', prefix + 'am_mato'), resolveVal(prefix + 'at', prefix + 'ato'), resolveVal(prefix + 'al', prefix + 'alo'), resolveVal(prefix + 'ag', prefix + 'ago'), resolveVal(prefix + 'ac', prefix + 'aco')].filter(v => v !== "").join(" ");
+            if (att) base += (base ? ", " : "") + att;
+        }
+        return base || "N/A";
+    }
+
+    function toggleOtherConn() {
+        document.getElementById('connTypeOther').style.display = (document.getElementById('connType').value === "OTHER") ? "block" : "none";
+    }
+
+    function lookupData() {
+        const part = document.getElementById('partLookup').value.toUpperCase().trim(), unit = document.getElementById('unitSelect').value, data = hoseDatabase[part];
+        if (data) {
+            document.getElementById('hoseID').value = data.id;
+            document.getElementById('workPressure').value = (unit === "BAR" ? data.bar : data.psi);
+            document.getElementById('tempRange').value = data.temp;
+            document.getElementById('reinforcement').value = data.reinforce;
+            const descArea = document.getElementById('desc');
+            descArea.value = data.desc; descArea.style.height = ''; descArea.style.height = descArea.scrollHeight + 'px';
+            ['e1s', 'e2s', 'e1as', 'e2as'].forEach(id => document.getElementById(id).value = data.id);
+            calculateTP();
+        }
+    }
+
+    function calculateTP() {
+        const wpInput = document.getElementById('workPressure').value, multiplier = parseFloat(document.getElementById('tpMultiplier').value), unit = document.getElementById('unitSelect').value, tpField = document.getElementById('testPressure');
+        const wpValue = parseFloat(wpInput);
+        tpField.value = !isNaN(wpValue) ? Math.round(wpValue * multiplier) + " " + unit : "";
+    }
+
+    function generateIDNumber() {
+        const so = document.getElementById('idSO').value || "XXXX", certDateVal = document.getElementById('certDate').value, soDateVal = document.getElementById('soDate').value;
+        const year = certDateVal ? new Date(certDateVal).getFullYear().toString().slice(-2) : "YY", day = soDateVal ? new Date(soDateVal).getDate().toString().padStart(2, '0') : "DD";
+        const sl1 = document.getElementById('idSL1').value || "00", sl2 = document.getElementById('idSL2').value, tech = document.getElementById('idTech').value || "NN";
+        const base = `TC-${so}/${year}-${day}-${sl1}-${tech}`;
+        return sl2 ? `${base} TO TC-${so}/${year}-${day}-${sl2}-${tech}` : base;
+    }
+
+    function generateTCNumber() {
+        const rawCustName = document.getElementById('custName').value.trim(), seq = document.getElementById('tcSeq').value.trim() || "000", dateVal = document.getElementById('certDate').value, year = dateVal ? new Date(dateVal).getFullYear() : new Date().getFullYear();
+        let identifier = "XXX";
+        if (rawCustName) {
+            const words = rawCustName.split(/\s+/).filter(word => word.length > 0);
+            identifier = (words.length === 1) ? words[0].substring(0, 3).toUpperCase() : words.map(w => w[0]).join('').toUpperCase();
+        }
+        return `PFI/${identifier}/${seq}/${year}`;
+    }
+
+    function clearAll() {
+        document.querySelectorAll('#mainForm input, #mainForm textarea, #mainForm select').forEach(i => {
+            if (i.tagName === 'SELECT' && !['tpMultiplier', 'unitSelect', 'testType', 'connType'].includes(i.id)) i.selectedIndex = 0;
+            else if (i.type === 'checkbox') i.checked = (i.id === 'toggleIdNo');
+            else if (!['obs', 'tpMultiplier', 'unitSelect', 'testType', 'connType'].includes(i.id)) i.value = '';
+        });
+        document.getElementById('desc').style.height = '40px'; document.getElementById('certificate').style.display = 'none';
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('certDate').value = today; document.getElementById('soDate').value = today; document.getElementById('lpoDate').value = today;
+        document.getElementById('end1Section').style.display = 'none'; document.getElementById('end2Section').style.display = 'none';
+    }
+
+    function generate() {
+        const type = document.getElementById('testType').value, unit = document.getElementById('unitSelect').value, formatDate = (id) => { const v = document.getElementById(id).value; return v ? new Date(v).toLocaleDateString('en-GB') : ""; };
+        document.getElementById('outTc').innerText = generateTCNumber();
+        
+        // Revised Title Logic: Both HYDRO and HYDRO_SS show as "HYDROTEST CERTIFICATE"
+        if (type === "HYDRO_COMP") {
+            document.getElementById('outTitle').innerText = "HYDROTEST CERTIFICATE";
+        } else if (type === "HYDRO_SS" || type === "HYDRO") {
+            document.getElementById('outTitle').innerText = "HYDROTEST CERTIFICATE";
+        } else {
+            document.getElementById('outTitle').innerText = document.getElementById('testType').options[document.getElementById('testType').selectedIndex].text;
+        }
+
+        document.getElementById('outDate').innerText = formatDate('certDate'); document.getElementById('outCust').innerText = document.getElementById('custName').value;
+        document.getElementById('outLpo').innerText = document.getElementById('lpoNo').value; document.getElementById('outLpoDate').innerText = formatDate('lpoDate');
+        document.getElementById('outDesc').innerText = document.getElementById('desc').value;
+        document.getElementById('outSn').innerText = document.getElementById('sn').value;
+        document.getElementById('outLen').innerText = document.getElementById('length').value; document.getElementById('outQty').innerText = document.getElementById('qty').value;
+        document.getElementById('outId').innerText = document.getElementById('hoseID').value; document.getElementById('outTemp').innerText = document.getElementById('tempRange').value;
+        document.getElementById('outWp').innerText = document.getElementById('workPressure').value ? document.getElementById('workPressure').value + " " + unit : '';
+        document.getElementById('outTp').innerText = document.getElementById('testPressure').value;
+        document.getElementById('rowIdNo').style.display = document.getElementById('toggleIdNo').checked ? 'table-row' : 'none';
+        document.getElementById('outIdNo').innerText = generateIDNumber(); document.getElementById('outRein').innerText = document.getElementById('reinforcement').value;
+        document.getElementById('outObs').innerText = document.getElementById('obs').value;
+        
+        const connSelect = document.getElementById('connType');
+        document.getElementById('outConnType').innerText = (connSelect.value === "OTHER") ? document.getElementById('connTypeOther').value : connSelect.value;
+        document.getElementById('outEnd1').innerText = buildEndStr('e1'); document.getElementById('outEnd2').innerText = buildEndStr('e2');
+        document.getElementById('outFooterDate').innerText = formatDate('certDate');
+        
+        const certStatement = "I Certify on behalf of the company, association or person named here under that the item described here in were, to be best of my knowledge, Tested and there after examined and were found to be free leaks, cracks, flaws or other defects.";
+
+        if(type === "HYDRO") {
+            document.getElementById('outLegal').innerHTML = `These hoses hydro tested for the above pressure a period of not less than 30 seconds nor more than 60 seconds accordance with the <b>SAE International standard J 343 DEC 2017/DIN EN 1829/EN ISO 1402 STANDARD</b> procedures and found no indication of failure or leakage during the complete test period.<br><br>${certStatement}`;
+            document.getElementById('outCautionLabel').innerText = "CAUTION:"; document.getElementById('outCaution').innerText = "Water and glycol mixture has been utilized in the proof  testing of this assembly. Whilst the medium has been carefully purged from the assembly, still small traces of residues may be present. Additional purges are recommended for application incompatible with water and glycol residues.";
+        } else if(type === "HYDRO_SS") {
+            // New logic for SS HOSE
+            document.getElementById('outLegal').innerHTML = `The above flexible metallic hose assemblies are tested to the procedure in accordance to BS <b>6501 : Part 1 : 2004</b>, and are hydro tested to the above stated pressure to a holding period as below:<br>Not less than 1minute for hoses up to 2",<br>Not less than 2 minutes for hoses up to 2" to 4",<br>Not less than 3 minutes for hoses above 4"<br><br>${certStatement}`;
+            document.getElementById('outCautionLabel').innerText = "CAUTION!"; document.getElementById('outCaution').innerText = "Water and glycol mixture has been utilized in the proof testing of this assembly. Whilst the medium has been carefully purged from the assembly, still small traces of residues may be present. Additional purges are recommended for application incompatible with water and glycol residues.";
+        } else if(type === "HYDRO_COMP") {
+            document.getElementById('outLegal').innerHTML = `This hoses hydro tested for the above pressure for 5 Minutes and found no leak during the complete test period.<br><br>${certStatement}`;
+            document.getElementById('outCautionLabel').innerText = "CAUTION!"; document.getElementById('outCaution').innerText = "Water and glycol mixture has been utilized in the proof  testing of this assembly. Whilst the medium has been carefully purged from the assembly, still small traces of residues may be present. Additional purges are recommended for application incompatible with water and glycol residues.";
+        } else if(type === "NITROGEN") {
+            document.getElementById('outLegal').innerHTML = `These hoses nitrogen test for the above pressure a period of not less than 30 seconds nor more than 60 seconds and found no indication of failure or leakage during the complete test period.<br><br>${certStatement}`;
+            document.getElementById('outCautionLabel').innerText = "CAUTION:"; document.getElementById('outCaution').innerText = "Nitrogen gas has been utilized in the proof  testing of this assembly. Whilst the medium has been carefully purged from the assembly, still small traces of residues may be present. Additional purges are recommended for application incompatible with nitrogen residues.";
+        } else {
+            document.getElementById('outLegal').innerHTML = `These hoses are breathing air tested for above pressure to a period of not less than 30 seconds or more than 60 seconds and found no indication of failure or leakage during the complete test period.<br><br>${certStatement}`;
+            document.getElementById('outCautionLabel').innerText = "CAUTION:"; document.getElementById('outCaution').innerText = "Breathing Air has been utilized in the proof  testing of this assembly. Ensure cleanliness standards are met before use.";
+        }
+        document.getElementById('certificate').style.display = 'block';
+    }
+
+    function saveFilledHTML() {
+        generate();
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            if (input.tagName === 'SELECT') {
+                Array.from(input.options).forEach(opt => opt.removeAttribute('selected'));
+                if(input.selectedIndex >= 0) input.options[input.selectedIndex].setAttribute('selected', 'selected');
+            } else if (input.tagName === 'TEXTAREA') {
+                input.innerHTML = input.value;
+            } else if (input.type === 'checkbox') {
+                if (input.checked) input.setAttribute('checked', 'checked'); 
+                else input.removeAttribute('checked');
+            } else if (input.type === 'date' || input.type === 'text') {
+                input.setAttribute('value', input.value);
+            }
+        });
+        const e1Sec = document.getElementById('end1Section');
+        const e2Sec = document.getElementById('end2Section');
+        e1Sec.setAttribute('style', 'display: ' + e1Sec.style.display);
+        e2Sec.setAttribute('style', 'display: ' + e2Sec.style.display);
+        const clone = document.documentElement.cloneNode(true), blob = new Blob([clone.outerHTML], { type: 'text/html' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        const fileName = `${generateTCNumber().replace(/\//g, '_')}-${document.getElementById('sn').value.trim() || "0"}.html`;
+        a.download = fileName;
+        a.click();
+    }
+</script>
+</body>
+</html>
